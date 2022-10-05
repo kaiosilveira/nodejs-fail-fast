@@ -1,10 +1,17 @@
 import Todo from '..';
 
+export type ConcreteTodoProps = { id?: string; title: string };
 export default class ConcreteTodo implements Todo {
-  private _title;
+  private _id?: string;
+  private _title: string;
 
-  constructor(title: string) {
-    this._title = title;
+  constructor(props: ConcreteTodoProps) {
+    this._id = props.id;
+    this._title = props.title;
+  }
+
+  getId() {
+    return this._id;
   }
 
   getTitle(): string {

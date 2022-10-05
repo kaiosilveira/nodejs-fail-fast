@@ -15,6 +15,6 @@ export default class ConcreteTodoBuilder {
   }
 
   build(): Todo {
-    return new ConcreteTodo(this._title);
+    return new ConcreteTodo({ title: this._title });
   }
 }
