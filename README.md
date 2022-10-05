@@ -3,3 +3,6 @@
 # Fail Fast
 
 Implementation of the Fail Fast pattern
+
+- parameter validation
+- user validation before saving

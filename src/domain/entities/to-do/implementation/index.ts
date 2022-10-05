@@ -27,12 +27,12 @@ export default class ConcreteTodo implements Todo {
     return this._title;
   }
 
+  toJSON(): object {
+    return { title: this._title };
+  }
+
   async save(): Promise<string> {
     if (this._persistenceManager) this._id = await this._persistenceManager?.save(this);
     return this._id;
-  }
-
-  toJSON(): object {
-    return { title: this._title };
   }
 }
