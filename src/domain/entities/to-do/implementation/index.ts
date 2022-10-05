@@ -7,7 +7,7 @@ export default class ConcreteTodo implements Todo {
     this._title = title;
   }
 
-  getTitle() {
+  getTitle(): string {
     return this._title;
   }
 
