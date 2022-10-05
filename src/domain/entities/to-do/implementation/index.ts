@@ -1,4 +1,4 @@
-import Todo from "..";
+import Todo from '..';
 
 export default class ConcreteTodo implements Todo {
   private _title;
@@ -13,5 +13,9 @@ export default class ConcreteTodo implements Todo {
 
   save(): Promise<string> {
     throw new Error('Method not implemented.');
+  }
+
+  toJSON(): object {
+    return { title: this._title };
   }
 }
