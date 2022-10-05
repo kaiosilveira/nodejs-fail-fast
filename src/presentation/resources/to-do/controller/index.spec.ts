@@ -1,14 +1,20 @@
+jest.mock('../../../../domain/entities/to-do/builder');
+
 import { Request, Response } from 'express';
-import FakeExpressResponse from '../../../../__mocks__/express/response';
+
 import TodoController from '.';
 import * as httpCodes from '../../../enumerators/http/status-codes';
-import FakeTodoService from '../../../../application/services/todo/fake';
+
+import FakeTodo from '../../../../domain/entities/to-do/fake';
+import FakeTodoBuilder from '../../../../domain/entities/to-do/builder/fake';
+
+import FakeExpressResponse from '../../../../__mocks__/express/response';
 
 describe('TodoController', () => {
   describe('create', () => {
     it('should return 403 - BAD REQUEST if title is not defined', async () => {
-      const todoService = new FakeTodoService();
-      const ctrl = new TodoController({ todoService });
+      const todoBuilder = new FakeTodoBuilder();
+      const ctrl = new TodoController(todoBuilder);
 
       const res = new FakeExpressResponse() as unknown as Response;
       const spyOnStatus = jest.spyOn(res, 'status');
@@ -23,22 +29,25 @@ describe('TodoController', () => {
     });
 
     it('should create a to do', async () => {
+      const id = 'abc-def';
       const title = 'Learn Typescript';
-      const todoService = new FakeTodoService();
+      const todoBuilder = new FakeTodoBuilder();
+      const fakeTodo = new FakeTodo();
+
+      jest.spyOn(fakeTodo, 'save').mockImplementation(jest.fn());
+      jest.spyOn(fakeTodo, 'toJSON').mockReturnValue({ id, title });
+      jest.spyOn(todoBuilder, 'withTitle').mockReturnValue(todoBuilder);
+      jest.spyOn(todoBuilder, 'build').mockReturnValue(fakeTodo);
 
       const res = new FakeExpressResponse() as unknown as Response;
       const spyOnResJson = jest.spyOn(res, 'json');
-      const spyOnSvcCreate = jest
-        .spyOn(todoService, 'createTodo')
-        .mockReturnValue(Promise.resolve(1));
 
       const req = { body: { title } } as Request;
 
-      const ctrl = new TodoController({ todoService });
+      const ctrl = new TodoController(todoBuilder);
       await ctrl.create(req, res);
 
-      expect(spyOnSvcCreate).toHaveBeenCalledWith({ title });
-      expect(spyOnResJson).toHaveBeenCalledWith({ id: 1, title });
+      expect(spyOnResJson).toHaveBeenCalledWith({ id, title });
     });
   });
 });
