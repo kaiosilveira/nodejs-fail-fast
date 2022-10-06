@@ -1,14 +1,12 @@
 jest.mock('../../../../domain/entities/to-do/builder');
 
-import { Request, Response } from 'express';
-
 import TodoController from '.';
 import * as httpCodes from '../../../enumerators/http/status-codes';
 
 import FakeTodo from '../../../../domain/entities/to-do/fake';
 import FakeTodoBuilder from '../../../../domain/entities/to-do/builder/fake';
 
-import FakeExpressResponse from '../../../../__mocks__/express/response';
+import FakeExpressFactory from '../../../../__mocks__/express/factory';
 
 describe('TodoController', () => {
   describe('create', () => {
@@ -18,11 +16,10 @@ describe('TodoController', () => {
       const todoBuilder = new FakeTodoBuilder();
       const ctrl = new TodoController(todoBuilder);
 
-      const res = new FakeExpressResponse() as unknown as Response;
+      const req = FakeExpressFactory.createRequest({ headers: {}, body: { title: undefined } });
+      const res = FakeExpressFactory.createResponse();
       const spyOnStatus = jest.spyOn(res, 'status');
       const spyOnResJson = jest.spyOn(res, 'json');
-
-      const req = { headers: {}, body: { title: undefined } } as Request;
 
       await ctrl.create(req, res);
 
@@ -34,14 +31,14 @@ describe('TodoController', () => {
       const todoBuilder = new FakeTodoBuilder();
       const ctrl = new TodoController(todoBuilder);
 
-      const res = new FakeExpressResponse() as unknown as Response;
-      const spyOnStatus = jest.spyOn(res, 'status');
-      const spyOnResJson = jest.spyOn(res, 'json');
-
-      const req = {
+      const req = FakeExpressFactory.createRequest({
         headers: { 'x-user-id': undefined },
         body: { title: 'Learn Typescript' },
-      } as unknown as Request;
+      });
+
+      const res = FakeExpressFactory.createResponse();
+      const spyOnStatus = jest.spyOn(res, 'status');
+      const spyOnResJson = jest.spyOn(res, 'json');
 
       await ctrl.create(req, res);
 
@@ -53,14 +50,14 @@ describe('TodoController', () => {
       const todoBuilder = new FakeTodoBuilder();
       const ctrl = new TodoController(todoBuilder);
 
-      const res = new FakeExpressResponse() as unknown as Response;
-      const spyOnStatus = jest.spyOn(res, 'status');
-      const spyOnResJson = jest.spyOn(res, 'json');
-
-      const req = {
+      const req = FakeExpressFactory.createRequest({
         headers: { 'x-user-id': '' },
         body: { title: 'Learn Typescript' },
-      } as unknown as Request;
+      });
+
+      const res = FakeExpressFactory.createResponse();
+      const spyOnStatus = jest.spyOn(res, 'status');
+      const spyOnResJson = jest.spyOn(res, 'json');
 
       await ctrl.create(req, res);
 
@@ -79,10 +76,13 @@ describe('TodoController', () => {
       jest.spyOn(todoBuilder, 'withTitle').mockReturnValue(todoBuilder);
       jest.spyOn(todoBuilder, 'build').mockReturnValue(fakeTodo);
 
-      const res = new FakeExpressResponse() as unknown as Response;
-      const spyOnResJson = jest.spyOn(res, 'json');
+      const req = FakeExpressFactory.createRequest({
+        headers: { 'x-user-id': userId },
+        body: { title },
+      });
 
-      const req = { headers: { 'x-user-id': userId }, body: { title } } as unknown as Request;
+      const res = FakeExpressFactory.createResponse();
+      const spyOnResJson = jest.spyOn(res, 'json');
 
       const ctrl = new TodoController(todoBuilder);
       await ctrl.create(req, res);
