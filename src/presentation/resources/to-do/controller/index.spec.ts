@@ -12,6 +12,8 @@ import FakeExpressResponse from '../../../../__mocks__/express/response';
 
 describe('TodoController', () => {
   describe('create', () => {
+    const userId = '123-abc';
+
     it('should return 403 - BAD REQUEST if title is not defined', async () => {
       const todoBuilder = new FakeTodoBuilder();
       const ctrl = new TodoController(todoBuilder);
@@ -20,12 +22,50 @@ describe('TodoController', () => {
       const spyOnStatus = jest.spyOn(res, 'status');
       const spyOnResJson = jest.spyOn(res, 'json');
 
-      const req = { body: {} } as Request;
+      const req = { headers: {}, body: { title: undefined } } as Request;
 
       await ctrl.create(req, res);
 
       expect(spyOnStatus).toHaveBeenCalledWith(httpCodes.BAD_REQUEST);
       expect(spyOnResJson).toHaveBeenCalledWith({ msg: 'Invalid to-do title' });
+    });
+
+    it('should return 403 - BAD REQUEST if user id is undefined', async () => {
+      const todoBuilder = new FakeTodoBuilder();
+      const ctrl = new TodoController(todoBuilder);
+
+      const res = new FakeExpressResponse() as unknown as Response;
+      const spyOnStatus = jest.spyOn(res, 'status');
+      const spyOnResJson = jest.spyOn(res, 'json');
+
+      const req = {
+        headers: { 'x-user-id': undefined },
+        body: { title: 'Learn Typescript' },
+      } as unknown as Request;
+
+      await ctrl.create(req, res);
+
+      expect(spyOnStatus).toHaveBeenCalledWith(httpCodes.BAD_REQUEST);
+      expect(spyOnResJson).toHaveBeenCalledWith({ msg: 'Invalid user identifier' });
+    });
+
+    it('should return 403 - BAD REQUEST if user id is empty', async () => {
+      const todoBuilder = new FakeTodoBuilder();
+      const ctrl = new TodoController(todoBuilder);
+
+      const res = new FakeExpressResponse() as unknown as Response;
+      const spyOnStatus = jest.spyOn(res, 'status');
+      const spyOnResJson = jest.spyOn(res, 'json');
+
+      const req = {
+        headers: { 'x-user-id': '' },
+        body: { title: 'Learn Typescript' },
+      } as unknown as Request;
+
+      await ctrl.create(req, res);
+
+      expect(spyOnStatus).toHaveBeenCalledWith(httpCodes.BAD_REQUEST);
+      expect(spyOnResJson).toHaveBeenCalledWith({ msg: 'Invalid user identifier' });
     });
 
     it('should create a to do', async () => {
@@ -42,7 +82,7 @@ describe('TodoController', () => {
       const res = new FakeExpressResponse() as unknown as Response;
       const spyOnResJson = jest.spyOn(res, 'json');
 
-      const req = { body: { title } } as Request;
+      const req = { headers: { 'x-user-id': userId }, body: { title } } as unknown as Request;
 
       const ctrl = new TodoController(todoBuilder);
       await ctrl.create(req, res);

@@ -7,7 +7,10 @@ export default class TodoController {
 
   async create(req: Request, res: Response) {
     const { title } = req.body;
+    const userId = req.headers['x-user-id'];
+
     if (!title) return res.status(BAD_REQUEST).json({ msg: 'Invalid to-do title' });
+    if (!userId) return res.status(BAD_REQUEST).json({ msg: 'Invalid user identifier' });
 
     const todo = this.todoBuilder.withTitle(title).build();
     todo.save();
