@@ -1,15 +1,17 @@
 import InMemoryCache from '..';
 
+const CACHE = {};
+
 export default class ConcreteInMemoryCache implements InMemoryCache {
-  exists(key: string): Promise<boolean> {
-    throw new Error('Method not implemented.');
+  async exists(key: string): Promise<boolean> {
+    return Promise.resolve(Object.keys(CACHE).some(k => k === key));
   }
 
-  set(key: string, value: string): Promise<void> {
-    throw new Error('Method not implemented.');
+  async set(key: string, value: string): Promise<void> {
+    Promise.resolve((CACHE[key] = value));
   }
 
-  get(key: string): Promise<string | undefined> {
-    throw new Error('Method not implemented.');
+  async get(key: string): Promise<string | undefined> {
+    return Promise.resolve(CACHE[key]);
   }
 }
