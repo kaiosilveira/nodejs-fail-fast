@@ -55,6 +55,7 @@ export default class ConcreteTodo implements Todo {
   }
 
   async getById(id: string): Promise<Todo> {
-    throw new Error('Method not implemented.');
+    if (!id) throw new Error('Failed to list to-do by id. Invalid identifier.');
+    else return Promise.resolve(new ConcreteTodo({ id, title: 't', ownerId: 'system' }));
   }
 }

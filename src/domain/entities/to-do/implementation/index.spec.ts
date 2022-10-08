@@ -68,4 +68,14 @@ describe('ConcreteTodo', () => {
       expect(result).toEqual(todoList);
     });
   });
+
+  describe('getById', () => {
+    it('should throw an error if id is invalid', async () => {
+      const id = '';
+      const todo = new ConcreteTodo({ title: 'temp obj', ownerId: 'system' });
+      await expect(todo.getById(id)).rejects.toThrow(
+        'Failed to list to-do by id. Invalid identifier.'
+      );
+    });
+  });
 });
