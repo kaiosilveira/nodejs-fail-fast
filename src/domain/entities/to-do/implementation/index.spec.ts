@@ -17,6 +17,11 @@ describe('ConcreteTodo', () => {
   });
 
   describe('save', () => {
+    it('should throw an error if no persistance manager was defined when executing save', async () => {
+      const todo = new ConcreteTodo({ title: 'Learn Typescript', ownerId: '2345' });
+      await expect(todo.save()).rejects.toThrow(`No persistance manager was defined for to-do`);
+    });
+
     it('should save itself', async () => {
       const id = 'abc';
       const persistenceManager = { save: () => Promise.resolve(id) } as TodoPersistenceManager;

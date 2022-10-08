@@ -43,8 +43,10 @@ export default class ConcreteTodo implements Todo {
   }
 
   async save(): Promise<string> {
-    if (this._persistenceManager) this._id = await this._persistenceManager?.save(this);
-    return this._id;
+    if (this._persistenceManager) {
+      this._id = await this._persistenceManager?.save(this);
+      return this._id;
+    } else throw new Error(`No persistance manager was defined for to-do`);
   }
 
   async list(): Promise<Todo[]> {
