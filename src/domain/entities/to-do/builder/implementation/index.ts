@@ -3,9 +3,11 @@ import ConcreteTodo from '../../implementation';
 
 export default class ConcreteTodoBuilder {
   private _title: string;
+  private _ownerId: string;
 
   constructor() {
     this._title = '';
+    this._ownerId = '';
   }
 
   withTitle(title: string): ConcreteTodoBuilder {
@@ -14,7 +16,13 @@ export default class ConcreteTodoBuilder {
     return this;
   }
 
+  withOwnerId(ownerId: string): ConcreteTodoBuilder {
+    if (!ownerId) throw new Error('Invalid ownerId. Expected a non-empty string.');
+    this._ownerId = ownerId;
+    return this;
+  }
+
   build(): Todo {
-    return new ConcreteTodo({ title: this._title });
+    return new ConcreteTodo({ title: this._title, ownerId: this._ownerId });
   }
 }

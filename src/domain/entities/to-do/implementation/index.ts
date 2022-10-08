@@ -3,6 +3,7 @@ import { TodoPersistenceManager } from '../../../../data-access/persistence/mana
 
 export type ConcreteTodoProps = {
   title: string;
+  ownerId: string;
   id?: string;
   persistenceManager?: TodoPersistenceManager;
 };
@@ -10,13 +11,19 @@ export type ConcreteTodoProps = {
 export default class ConcreteTodo implements Todo {
   private _id: string;
   private _title: string;
+  private _ownerId: string;
   private readonly _persistenceManager?: TodoPersistenceManager;
 
   constructor(props: ConcreteTodoProps) {
     this._id = props.id ?? '';
+    this._ownerId = props.ownerId;
     this._title = props.title;
 
     if (props.persistenceManager) this._persistenceManager = props.persistenceManager;
+  }
+
+  getOwnerId(): string {
+    return this._ownerId;
   }
 
   getId() {
@@ -28,7 +35,7 @@ export default class ConcreteTodo implements Todo {
   }
 
   toJSON(): object {
-    return { title: this._title };
+    return { title: this._title, ownerId: this._ownerId };
   }
 
   async save(): Promise<string> {
@@ -40,7 +47,7 @@ export default class ConcreteTodo implements Todo {
     throw new Error('Method not implemented.');
   }
 
-  async getById(id: number): Promise<Todo> {
+  async getById(id: string): Promise<Todo> {
     throw new Error('Method not implemented.');
   }
 }

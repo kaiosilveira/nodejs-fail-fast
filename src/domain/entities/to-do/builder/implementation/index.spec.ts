@@ -14,4 +14,18 @@ describe('TodoBuilder', () => {
       expect(todo.getTitle()).toEqual(title);
     });
   });
+
+  describe('withOwnerId', () => {
+    it('should throw an error if title is empty', () => {
+      expect(() => new TodoBuilder().withOwnerId('')).toThrow(
+        'Invalid ownerId. Expected a non-empty string.'
+      );
+    });
+
+    it('should build a to-do with a ownerId', () => {
+      const ownerId = '1234-432432';
+      const todo = new TodoBuilder().withOwnerId(ownerId).build();
+      expect(todo.getOwnerId()).toEqual(ownerId);
+    });
+  });
 });

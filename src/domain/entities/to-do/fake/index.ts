@@ -1,10 +1,16 @@
 import Todo from '..';
 
 export default class FakeTodo implements Todo {
+  getOwnerId(): string {
+    throw new Error('Method not implemented.');
+  }
+  getId(): string {
+    throw new Error('Method not implemented.');
+  }
   list(): Promise<Todo[]> {
     throw new Error('Method not implemented.');
   }
-  getById(id: number): Promise<Todo> {
+  getById(id: string): Promise<Todo> {
     throw new Error('Method not implemented.');
   }
   getTitle(): string {

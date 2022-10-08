@@ -5,9 +5,12 @@ describe('ConcreteTodo', () => {
   describe('toJSON', () => {
     it('should return a POJO representation of itself', () => {
       const title = 'Learn active record';
-      const todo = new ConcreteTodo({ title });
+      const ownerId = '1234';
+      const todo = new ConcreteTodo({ title, ownerId });
+
       const json = todo.toJSON();
-      expect(json).toEqual({ title });
+
+      expect(json).toEqual({ title, ownerId });
     });
   });
 
@@ -16,7 +19,11 @@ describe('ConcreteTodo', () => {
       const id = 'abc';
       const persistenceManager = { save: () => Promise.resolve(id) } as TodoPersistenceManager;
 
-      const todo = new ConcreteTodo({ title: 'Learn Typescript', persistenceManager });
+      const todo = new ConcreteTodo({
+        title: 'Learn Typescript',
+        ownerId: '2345',
+        persistenceManager,
+      });
       await todo.save();
 
       expect(todo.getId()).toEqual(id);
