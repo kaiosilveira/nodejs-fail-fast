@@ -35,4 +35,12 @@ export default class ConcreteTodo implements Todo {
     if (this._persistenceManager) this._id = await this._persistenceManager?.save(this);
     return this._id;
   }
+
+  async list(): Promise<Todo[]> {
+    throw new Error('Method not implemented.');
+  }
+
+  async getById(id: number): Promise<Todo> {
+    throw new Error('Method not implemented.');
+  }
 }
