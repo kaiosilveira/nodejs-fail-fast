@@ -17,4 +17,12 @@ export default class TodoController {
 
     return res.json(todo.toJSON());
   }
+
+  async listMine(req: Request, res: Response) {
+    const userId = req.headers['x-user-id']?.toString();
+    if (!userId) return res.status(BAD_REQUEST).json({ msg: 'Invalid user identifier' });
+
+    const result = await this.todoBuilder.build().listByOwnerId(userId);
+    return res.json(result);
+  }
 }
