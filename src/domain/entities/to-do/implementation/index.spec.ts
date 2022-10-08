@@ -31,6 +31,7 @@ describe('ConcreteTodo', () => {
         ownerId: '2345',
         persistenceManager,
       });
+
       await todo.save();
 
       expect(todo.getId()).toEqual(id);
@@ -74,8 +75,29 @@ describe('ConcreteTodo', () => {
       const id = '';
       const todo = new ConcreteTodo({ title: 'temp obj', ownerId: 'system' });
       await expect(todo.getById(id)).rejects.toThrow(
-        'Failed to list to-do by id. Invalid identifier.'
+        'Failed to get to-do by id. Invalid identifier.'
       );
+    });
+
+    it('should throw an error if no retrieval manager was specified when trying to get to-do', async () => {
+      const id = '123-345';
+      const todo = new ConcreteTodo({ title: 'temp obj', ownerId: 'system' });
+      await expect(todo.getById(id)).rejects.toThrow(
+        'Failed to get to-do by id. No retrieval manager was provided.'
+      );
+    });
+
+    it('should get a to-do by its id', async () => {
+      const id = '1234';
+      const todo = new ConcreteTodo({ id, title: 'Learn TS', ownerId: '1234' });
+
+      const retrievalManager = { getById: noop } as unknown as TodoRetrievalManager;
+      jest.spyOn(retrievalManager, 'getById').mockResolvedValue(todo);
+
+      const temp = new ConcreteTodo({ title: 'temp obj', ownerId: 'system', retrievalManager });
+      const result = await temp.getById(id);
+
+      await expect(result).toEqual(todo);
     });
   });
 });
