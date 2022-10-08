@@ -3,7 +3,10 @@ import TodoBuilder from '../../../../domain/entities/to-do/builder';
 import { BAD_REQUEST } from '../../../enumerators/http/status-codes';
 
 export default class TodoController {
-  constructor(private readonly todoBuilder: TodoBuilder) {}
+  constructor(private readonly todoBuilder: TodoBuilder) {
+    this.create = this.create.bind(this);
+    this.listMine = this.listMine.bind(this);
+  }
 
   async create(req: Request, res: Response) {
     const { title } = req.body;
