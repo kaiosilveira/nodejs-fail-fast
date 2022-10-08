@@ -100,4 +100,38 @@ describe('ConcreteTodo', () => {
       await expect(result).toEqual(todo);
     });
   });
+
+  describe('listByOwnerId', () => {
+    it('should throw an error if owner id is invalid', async () => {
+      const ownerId = '';
+      const todo = new ConcreteTodo({ title: 'temp obj', ownerId: 'system' });
+      await expect(todo.listByOwnerId(ownerId)).rejects.toThrow(
+        'Failed to list to-do by ownerId. Invalid identifier.'
+      );
+    });
+
+    it('should throw an error if no retrieval manager was specified when trying to get to-do', async () => {
+      const ownerId = '123-345';
+      const todo = new ConcreteTodo({ title: 'temp obj', ownerId: 'system' });
+      await expect(todo.listByOwnerId(ownerId)).rejects.toThrow(
+        'Failed to list to-do by ownerId. No retrieval manager was provided.'
+      );
+    });
+
+    it('should list all to-dos of a given owner', async () => {
+      const ownerId = '1234';
+      const todoList = [
+        new ConcreteTodo({ id: '1234', title: 'Learn TS', ownerId }),
+        new ConcreteTodo({ id: '1234', title: 'Learn TS', ownerId }),
+      ];
+
+      const retrievalManager = { listByOwnerId: noop } as unknown as TodoRetrievalManager;
+      jest.spyOn(retrievalManager, 'listByOwnerId').mockResolvedValue(todoList);
+
+      const temp = new ConcreteTodo({ title: 'temp obj', ownerId: 'system', retrievalManager });
+      const result = await temp.listByOwnerId(ownerId);
+
+      await expect(result).toEqual(todoList);
+    });
+  });
 });

@@ -5,4 +5,6 @@ export default interface RetrievalManager<T> {
   getById(id: string): Promise<T>;
 }
 
-export interface TodoRetrievalManager extends RetrievalManager<Todo> {}
+export interface TodoRetrievalManager extends RetrievalManager<Todo> {
+  listByOwnerId(ownerId: string): Promise<Todo[]>;
+}
