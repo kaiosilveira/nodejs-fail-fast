@@ -1,12 +1,17 @@
 import TodoBuilder from '..';
 import Todo from '../..';
+import { TodoPersistenceManager } from '../../../../../data-access/persistence/managers/persistence-manager';
+import { TodoRetrievalManager } from '../../../../../data-access/retrieval/managers/retrieval-manager';
 import ConcreteTodo from '../../implementation';
 
 export default class ConcreteTodoBuilder implements TodoBuilder {
   private _title: string;
   private _ownerId: string;
 
-  constructor() {
+  constructor(
+    private readonly persistenceManager?: TodoPersistenceManager,
+    private readonly retrievalManager?: TodoRetrievalManager
+  ) {
     this._title = '';
     this._ownerId = '';
   }
@@ -24,6 +29,11 @@ export default class ConcreteTodoBuilder implements TodoBuilder {
   }
 
   build(): Todo {
-    return new ConcreteTodo({ title: this._title, ownerId: this._ownerId });
+    return new ConcreteTodo({
+      title: this._title,
+      ownerId: this._ownerId,
+      persistenceManager: this.persistenceManager,
+      retrievalManager: this.retrievalManager,
+    });
   }
 }
