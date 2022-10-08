@@ -10,6 +10,9 @@ export default class FakeTodo implements Todo {
   list(): Promise<Todo[]> {
     throw new Error('Method not implemented.');
   }
+  listByOwnerId(ownerId: string): Promise<Todo[]> {
+    throw new Error('Method not implemented.');
+  }
   getById(id: string): Promise<Todo> {
     throw new Error('Method not implemented.');
   }

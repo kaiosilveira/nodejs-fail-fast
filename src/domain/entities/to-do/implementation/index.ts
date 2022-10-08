@@ -54,6 +54,10 @@ export default class ConcreteTodo implements Todo {
     else throw new Error(`No retrieval manager was defined for to-do with id "${this._id}"`);
   }
 
+  listByOwnerId(ownerId: string): Promise<Todo[]> {
+    throw new Error('Method not implemented.');
+  }
+
   async getById(id: string): Promise<Todo> {
     if (!id) throw new Error('Failed to list to-do by id. Invalid identifier.');
     else return Promise.resolve(new ConcreteTodo({ id, title: 't', ownerId: 'system' }));
