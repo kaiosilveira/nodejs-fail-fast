@@ -4,10 +4,10 @@ import TodoController from '.';
 import * as httpCodes from '../../../enumerators/http/status-codes';
 
 import FakeTodo from '../../../../domain/entities/to-do/fake';
+import ConcreteTodo from '../../../../domain/entities/to-do/implementation';
 import FakeTodoBuilder from '../../../../domain/entities/to-do/builder/fake';
 
 import FakeExpressFactory from '../../../../__mocks__/express/factory';
-import Todo from '../../../../domain/entities/to-do';
 
 describe('TodoController', () => {
   describe('create', () => {
@@ -109,15 +109,13 @@ describe('TodoController', () => {
 
     it('should return all registered to-dos for a given user', async () => {
       const userId = 'abc-123';
-      const todoList = [
-        { id: '456-123', title: 'Learn TS', owner: userId } as unknown as Todo,
-        { id: '567-423', title: 'Read TDD', owner: userId } as unknown as Todo,
-      ];
+      const todo1 = new ConcreteTodo({ id: '456-123', title: 'Learn TS', ownerId: userId });
+      const todo2 = new ConcreteTodo({ id: '567-423', title: 'Read TDD', ownerId: userId });
 
       const todoBuilder = new FakeTodoBuilder();
       const fakeTodo = new FakeTodo();
 
-      jest.spyOn(fakeTodo, 'listByOwnerId').mockResolvedValue(todoList);
+      jest.spyOn(fakeTodo, 'listByOwnerId').mockResolvedValue([todo1, todo2]);
       jest.spyOn(todoBuilder, 'withTitle').mockReturnValue(todoBuilder);
       jest.spyOn(todoBuilder, 'build').mockReturnValue(fakeTodo);
 
@@ -128,7 +126,7 @@ describe('TodoController', () => {
       const ctrl = new TodoController(todoBuilder);
       await ctrl.listMine(req, res);
 
-      expect(spyOnJsonFn).toHaveBeenCalledWith(todoList);
+      expect(spyOnJsonFn).toHaveBeenCalledWith([todo1.toJSON(), todo2.toJSON()]);
     });
   });
 });

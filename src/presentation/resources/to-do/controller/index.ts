@@ -23,6 +23,6 @@ export default class TodoController {
     if (!userId) return res.status(BAD_REQUEST).json({ msg: 'Invalid user identifier' });
 
     const result = await this.todoBuilder.build().listByOwnerId(userId);
-    return res.json(result);
+    return res.json(result.map(r => r.toJSON()));
   }
 }
