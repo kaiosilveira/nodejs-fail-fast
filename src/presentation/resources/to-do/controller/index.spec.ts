@@ -74,8 +74,9 @@ describe('TodoController', () => {
 
       jest.spyOn(fakeTodo, 'save').mockImplementation(jest.fn());
       jest.spyOn(fakeTodo, 'toJSON').mockReturnValue({ id, title });
-      jest.spyOn(todoBuilder, 'withTitle').mockReturnValue(todoBuilder);
       jest.spyOn(todoBuilder, 'build').mockReturnValue(fakeTodo);
+      const spyOnWithTitle = jest.spyOn(todoBuilder, 'withTitle').mockReturnValue(todoBuilder);
+      const spyOnWithOwnerId = jest.spyOn(todoBuilder, 'withOwnerId').mockReturnValue(todoBuilder);
 
       const req = FakeExpressFactory.createRequest({
         headers: { 'x-user-id': userId },
@@ -88,6 +89,8 @@ describe('TodoController', () => {
       const ctrl = new TodoController(todoBuilder);
       await ctrl.create(req, res);
 
+      expect(spyOnWithOwnerId).toHaveBeenCalledWith(userId);
+      expect(spyOnWithTitle).toHaveBeenCalledWith(title);
       expect(spyOnResJson).toHaveBeenCalledWith({ id, title });
     });
   });
