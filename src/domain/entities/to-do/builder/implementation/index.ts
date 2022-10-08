@@ -1,7 +1,8 @@
+import TodoBuilder from '..';
 import Todo from '../..';
 import ConcreteTodo from '../../implementation';
 
-export default class ConcreteTodoBuilder {
+export default class ConcreteTodoBuilder implements TodoBuilder {
   private _title: string;
   private _ownerId: string;
 
