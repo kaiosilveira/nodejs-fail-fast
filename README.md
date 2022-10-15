@@ -1,6 +1,6 @@
 [![Continuous Integration](https://github.com/kaiosilveira/nodejs-ts-express-template/actions/workflows/ci.yml/badge.svg)](https://github.com/kaiosilveira/nodejs-ts-express-template/actions/workflows/ci.yml)
 
-ℹ️ _This repository is an example implementation in NodeJS of the "fail fast" pattern as described in "Release it! - Nygard" and is part of my Stability Pattern Series. Check out [kaiosilveira/stability-patterns](https://github.com/kaiosilveira/stability-patterns) for more details._
+ℹ️ _This repository is an example implementation in NodeJS of the "fail fast" pattern as described in "Release it! - Nygard" and is part of my Stability Patterns Series. Check out [kaiosilveira/stability-patterns](https://github.com/kaiosilveira/stability-patterns) for more details._
 
 # Fail Fast
 
